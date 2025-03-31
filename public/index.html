@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | TD Web</title>
+    <link
+      rel="icon"
+      href="https://cdn.glitch.global/f61a2915-cde6-4e38-b016-504cda6e4656/2025_03_26_04h_Kleki-removebg-preview.png?v=1742993178317"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #00b4d8, #0077b6);
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #0077b6;
+            margin-bottom: 30px;
+            font-size: 2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 0.9em;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            border-color: #0077b6;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 119, 182, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #0077b6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background: #005b8e;
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            color: #dc3545;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background: #ffe3e3;
+            display: none;
+            font-size: 0.9em;
+        }
+
+        .current-time {
+            text-align: center;
+            color: #666;
+            margin-top: 30px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: monospace;
+        }
+
+        .current-time i {
+            color: #0077b6;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .copyright {
+            text-align: center;
+            color: #666;
+            margin-top: 30px;
+            font-size: 0.8em;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .login-notice {
+            text-align: center;
+            color: #666;
+            margin-top: 20px;
+            font-size: 0.9em;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .login-notice i {
+            color: #0077b6;
+            margin-right: 5px;
+        }
+      
+        /* Thêm style cho phần password */
+        .password-group {
+            display: none;
+            margin-bottom: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .password-group.visible {
+            display: block;
+        }
+
+        .admin-notice {
+            color: #0077b6;
+            font-size: 0.9em;
+            margin-top: 10px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .admin-notice i {
+            margin-right: 5px;
+        }
+
+        .admin-notice.visible {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>
+            <i class="fas fa-comments"></i>
+            Chat Login
+        </h1>
+        <form id="loginForm" onsubmit="return handleLogin(event)">
+            <div class="input-group">
+                <label for="username">Tên người dùng</label>
+                <input type="text" id="username" required 
+                       placeholder="Tên người dùng"
+                       maxlength="60">
+            </div>
+            <div id="passwordGroup" class="password-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" id="password" 
+                       placeholder="Mật khẩu (chỉ dành cho quản trị viên)">
+                <div class="admin-notice">
+                    <i class="fas fa-shield-alt"></i>
+                    Yêu cầu xác thực quản trị viên
+                </div>
+            </div>
+            <button type="submit">
+                <i class="fas fa-sign-in-alt"></i>
+                Tham Gia
+            </button>
+            <div id="errorMessage" class="error-message"></div>
+        </form>
+
+        <div class="login-notice">
+            <i class="fas fa-info-circle"></i>
+            Nhập tên để vào phòng chat
+        </div>
+
+        <div class="current-time">
+            <i class="fas fa-clock"></i>
+            <span id="currentTime">2025-03-28 12:56:14</span>
+        </div>
+
+        <div class="copyright">
+            © 2025 TDW. Tất cả các quyền được bảo lưu. | Thiết kế bởi #nthdat
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_USERNAME = 'nthdat2937';
+        const usernameInput = document.getElementById('username');
+        const passwordGroup = document.getElementById('passwordGroup');
+        const passwordInput = document.getElementById('password');
+        const errorMessage = document.getElementById('errorMessage');
+        const adminNotice = document.querySelector('.admin-notice');
+
+        function updateTime() {
+            const now = new Date();
+            const formatted = now.toISOString().replace('T', ' ').slice(0, 19);
+            document.getElementById('currentTime').textContent = formatted;
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        usernameInput.addEventListener('input', function() {
+            const isAdmin = this.value.trim() === ADMIN_USERNAME;
+            passwordGroup.classList.toggle('visible', isAdmin);
+            adminNotice.classList.toggle('visible', isAdmin);
+            passwordInput.required = isAdmin;
+        });
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+            errorMessage.style.display = 'none';
+
+            if (!username) {
+                showError('Please enter a name');
+                return false;
+            }
+
+            if (username === ADMIN_USERNAME) {
+                try {
+                    const response = await fetch('/verify-admin', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ username, password })
+                    });
+
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        localStorage.setItem('chatUsername', username);
+                        localStorage.setItem('loginTime', document.getElementById('currentTime').textContent);
+                        localStorage.setItem('adminSessionToken', data.sessionToken);
+                        window.location.href = '/chat.html';
+                    } else {
+                        showError('Mật khẩu Admin không hợp lệ!');
+                    }
+                } catch (error) {
+                    showError('Error during admin verification');
+                }
+            } else {
+                localStorage.setItem('chatUsername', username);
+                localStorage.setItem('loginTime', document.getElementById('currentTime').textContent);
+                window.location.href = '/chat.html';
+            }
+            
+            return false;
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            errorMessage.style.animation = 'none';
+            errorMessage.offsetHeight; // Trigger reflow
+            errorMessage.style.animation = 'fadeIn 0.3s ease';
+        }
+
+        // Check if user is already logged in
+        if (localStorage.getItem('chatUsername')) {
+            window.location.href = '/chat.html';
+        }
+    </script>
+</body>
+</html>
